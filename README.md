@@ -1,138 +1,139 @@
-# 🏨 StayLuxe — Hotel Management System
+# 🏨 StayLuxe – Hotel Management System
 
-A full-stack Hotel Management System with **three completely separate interfaces**:
+A full-stack hotel management web application where customers can explore and book hotels, hotel owners can manage their properties, and administrators can manage the platform.
 
-| Interface | Who it's for | Access |
-|---|---|---|
-| **Customer** | Anyone browsing/booking hotels | Public — `frontend/customer/` |
-| **Hotel Owner** | Hotel partners who list & manage their properties | Not linked from customer nav bar; owners register at `frontend/owner/register.html` and log in at `frontend/owner/login.html` (requires admin approval first) |
-| **Admin** | Platform administrator | **Hidden** — no public link anywhere. Reach it directly at `frontend/admin/login.html`. Default credentials are created by `backend/seed.py` (see below). |
+## Project Team
 
-There is **no dropdown / toggle anywhere that lets a visitor pick "admin" or "owner"** — each interface lives on its own set of pages with its own login, and the admin portal is never linked from the public site.
+| Name | GitHub |
+|---|---|
+| Lakshya Sharma | [@lakshya6935](https://github.com/lakshya6935) |
+| Miheeka | [@miheeka04](https://github.com/miheeka04) |
 
----
+## Live Demo
 
-## 🧱 Tech Stack
+[View StayLuxe](https://hotel-management-system-murex-six.vercel.app/customer/index.html)
 
-- **Frontend:** HTML5, CSS3 (pastel purple/pink/teal theme, animations, modals/toasts), Vanilla JavaScript (fetch API)
-- **Backend:** Python 3, Flask, Flask-JWT-Extended (JWT auth), Flask-CORS
-- **Database:** MongoDB (via PyMongo)
-- **Currency:** All prices are shown in Indian Rupees (₹ / INR)
+## About the Project
 
----
+StayLuxe is designed to make hotel booking and management easier through separate interfaces for customers, hotel owners, and administrators.
 
-## 📁 Project Structure
+### Main Features
+
+**Customer**
+- Browse and search hotels.
+- View hotel details, rooms, and prices.
+- Register, log in, and book rooms.
+- View and manage bookings.
+
+**Hotel Owner**
+- Register and log in to the owner portal.
+- Add and manage hotels and rooms.
+- View and manage customer bookings.
+- Access the dashboard after admin approval.
+
+**Admin**
+- Manage users and hotel owners.
+- Approve or reject hotel listings.
+- Manage hotels and bookings.
+- Access the admin dashboard through a separate login.
+
+## Tech Stack
+
+- Frontend: HTML, CSS, JavaScript
+- Backend: Python, Flask
+- Database: MongoDB Atlas / MongoDB
+- Authentication: JWT
+- Deployment: Vercel (frontend), Render (backend)
+
+## Project Structure
 
 ```
-hotel-management-system/
+StayLuxe/
 ├── backend/
-│   ├── app.py                  # Flask entry point
-│   ├── config.py               # Env-based configuration
-│   ├── db.py                   # MongoDB connection & collections
-│   ├── seed.py                 # Creates default admin + sample data
+│   ├── app.py
+│   ├── config.py
+│   ├── db.py
+│   ├── seed.py
 │   ├── requirements.txt
-│   ├── .env.example            # Copy to .env and edit
 │   ├── routes/
-│   │   ├── auth_routes.py      # Register + role-specific login (customer/owner/admin)
-│   │   ├── hotel_routes.py     # Hotel & room CRUD
-│   │   ├── booking_routes.py   # Booking creation/cancellation
-│   │   ├── admin_routes.py     # Admin-only management endpoints
-│   │   └── owner_routes.py     # Owner-only endpoints
 │   └── utils/
-│       └── helpers.py          # Serialization + role_required decorator
-└── frontend/
-    ├── assets/
-    │   ├── css/common.css      # Shared design system (colors, buttons, cards, animations)
-    │   └── js/common.js        # Shared API wrapper, toasts, modal, auth helpers
-    ├── customer/                # Public-facing site
-    │   ├── index.html            (browse & search hotels)
-    │   ├── login.html / register.html
-    │   ├── hotel-details.html    (room list + booking popup)
-    │   └── my-bookings.html
-    ├── owner/                   # Hotel owner dashboard (separate, not publicly linked)
-    │   ├── login.html / register.html
-    │   ├── dashboard.html        (stats)
-    │   ├── add-hotel.html        (manage own hotels & rooms)
-    │   └── manage-bookings.html
-    └── admin/                   # Admin dashboard (hidden, no public link)
-        ├── login.html            (dedicated admin-only login)
-        ├── dashboard.html        (platform-wide stats, approve hotels)
-        ├── manage-hotels.html    (approve/reject/delete any hotel)
-        └── manage-users.html     (approve owners, block/delete users)
+│
+├── frontend/
+│   ├── assets/
+│   │   ├── css/
+│   │   └── js/
+│   ├── customer/
+│   ├── owner/
+│   └── admin/
+│
+└── README.md
 ```
 
----
+## Run the Project Locally
 
-## ⚙️ Setup Instructions
+### 1. Clone the repository
 
-### 1. Install & start MongoDB
+```bash
+git clone https://github.com/lakshya6935/StayLuxe.git
+cd StayLuxe
+```
 
-Make sure MongoDB is installed and running locally on the default port `27017`.
-(Alternatively use a free MongoDB Atlas cluster and paste its connection string into `.env`.)
-
-### 2. Backend setup
+### 2. Set up the backend
 
 ```bash
 cd backend
-python -m venv venv
-source venv/bin/activate        # Windows: venv\Scripts\activate
+python3 -m venv venv
+source venv/bin/activate
 pip install -r requirements.txt
-
-cp .env.example .env            # then edit .env if needed
-
-python seed.py                  # creates the admin account + sample hotels
-python app.py                   # starts the API on http://localhost:5000
 ```
 
-`seed.py` will print the **default admin credentials** to your terminal, e.g.:
+For Windows, activate the environment using:
 
+```bash
+venv\Scripts\activate
 ```
-email:    admin@stayluxe.com
-password: Admin@12345
+
+Create a `.env` file using the provided `.env.example` and configure your MongoDB connection string and secret keys.
+
+Start the backend:
+
+```bash
+python seed.py
+python app.py
 ```
 
-⚠️ Change this password (or the values in `.env`) before any real deployment.
+The Flask API runs on port 5000 by default.
 
-It also creates a sample **hotel owner** account (`owner@stayluxe.com` / `Owner@123`) and four sample hotels so the site isn't empty on first run.
+### 3. Start the frontend
 
-### 3. Frontend setup
-
-The frontend is plain HTML/CSS/JS — no build step required. Just serve the `frontend` folder with any static server, e.g.:
+Open another terminal:
 
 ```bash
 cd frontend
-python -m http.server 5500
+python3 -m http.server 5500
 ```
 
-Then open:
-- Customer site → `http://localhost:5500/customer/index.html`
-- Hotel Owner portal → `http://localhost:5500/owner/login.html`
-- Admin portal (hidden) → `http://localhost:5500/admin/login.html`
+Open the customer website:
 
-The frontend talks to the backend at `http://localhost:5000/api` (configured in `frontend/assets/js/common.js` via `API_BASE_URL`).
+http://localhost:5500/customer/index.html
 
----
+Owner portal:
 
-## 🔐 How the "separate, no-choice" access model works
+http://localhost:5500/owner/login.html
 
-- The **registration form** on the public site only ever creates a `customer` account — there is no role selector.
-- **Hotel owners** apply through their own separate registration page (`owner/register.html`). New owner accounts are created with `status: "pending"` and **cannot log in** until an admin approves them from the Admin → Manage Users screen.
-- The **admin account is never created through any public form** — it only exists via `backend/seed.py`, and its login page is not linked from the customer or owner interfaces at all.
-- Each login endpoint (`/api/auth/login/customer`, `/login/owner`, `/login/admin`) checks the account's role on the server, so even if someone guessed a URL, they can't log in to the wrong interface with the wrong account type.
+Admin portal:
 
----
+http://localhost:5500/admin/login.html
 
-## ✨ UI Features
+## Team Contributions
 
-- Pastel purple / pink / teal gradient theme, soft shadows, rounded cards
-- Smooth scroll-reveal animations, hover-lift cards, floating icons, spinner loaders
-- Toast notifications and popup modals (e.g. the booking form opens in an animated modal)
-- Fully responsive with a mobile nav drawer (customer site) and collapsible sidebar (admin/owner dashboards)
-- Hotel & room images, ratings, amenity pills, and all prices formatted in ₹ (INR)
+This project was developed collaboratively by Lakshya Sharma and Miheeka.
 
----
+Both contributors can contribute to the codebase, improve features, and maintain the project through GitHub.
 
-## 🔑 Sample Accounts (after running `seed.py`)
+## License
+
+This project was created for educational and portfolio purposes.
 
 | Role | Email | Password |
 |---|---|---|
